@@ -1,14 +1,57 @@
 
+#what combinations do we want to look for?
+
 
 class analyse:
 
-#need to remove whitespace at top of file
+#this class should utilise the scraper so it is receiving tuples of data
+#containing (event, key, time)
 
 
-    def key_length(data_lines, line_number):
-    #read the first character and store it and the time
-    #find the next instance of the character (released)
-    #write the info in a filename
+    def key_length(data_tuples):
+    #receives an array of tuples
+    #take the first tuple, store the values and then remove it (pop)
+    #search for the next instance of the key
+    #when found store the data and then remove it
+        current_tupl = data_tuples[0]
+        key = current_tupl[1]
+        time1 = current_tupl[2]
+        index = 0
+
+        #remove tuple
+        data_tuples.pop(0)
+
+        for tuple in data_tuples:
+            if( tuple[1]== key):
+                time2 = current_tupl[2]
+                data_tuples.pop(index)
+                break
+            index++
+
+        time_between_release = time2 - time1
+        data_pair = (key, time_between_release)
+        return data_pair
+
+
+    def calculate_release_times(data_tuples):
+        #call key_length to calculate the time
+        #write to file
+
+        #while the array of tuples is not empty
+        while(data_tuples):
+            analysed_data = key_length(data_tuples)
+            write_to_file(analysed_data)
+
+
+    #takes in a tuple containing (key, time pressed, time released) and writes it
+    def write_to_file(analysed_data):
+        myfile = open("analysis.txt", "a")
+        store = "Key: " + analysed_data[0] + " Time between press and release:  " + analysed_data[1] + "\n"
+        myfile.write(store)
+        myfile.close()
+
+
+    def unused():
         line = data_lines[line_number].rsplit() #remove the \n and split up
         letter = line[2]    #letter should be here
         print(letter)
@@ -49,15 +92,9 @@ class analyse:
 data_lines = []
 myfile = open('log.txt', "r")
 data_lines = myfile.readlines()
-#analyse.print_file(data_lines)
-analyse.key_length(data_lines, 0)
 
-
-#change this into a string so we can move through it easier
-
-#while there are still characters left to read
-#call key_length
-#move along a character
+#call the scraper here and process it into a list of tuples
+analyse.calculate_release_times(data_lines)
 
 
 myfile.close()

