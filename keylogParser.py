@@ -2,7 +2,7 @@ import statistics as stat
 
 bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
 			'at', 'on', 'es', 'ay', 'or', 'hi']
-currentUser = 'oskar'
+currentUser = 'aoife'
 
 class KeylogsParser:
 	def __init__(self, bigrams, file_name):
