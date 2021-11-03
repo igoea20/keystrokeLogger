@@ -1,6 +1,7 @@
 import statistics as stat
 
-bigrams = ['th', 'he', 'gh']
+bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
+			'at', 'on', 'es', 'ay', 'or', 'hi']
 currentUser = 'oskar'
 
 class KeylogsParser:
