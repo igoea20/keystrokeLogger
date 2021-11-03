@@ -1,13 +1,12 @@
 import statistics as stat
 
+bigrams = ['th', 'he', 'gh']
+
 class KeylogsParser:
-	def __init__(self, file_name):
-		self.bigrams = ['th', 'he']
+	def __init__(self, bigrams, file_name):
+		self.bigrams = bigrams
 		self.file_name = file_name
-		self.results = {
-			'th': [],
-			'he': []
-		}
+		self.results = {}
 
 	def read_file(self):
 		with open(self.file_name) as f:
@@ -21,7 +20,10 @@ class KeylogsParser:
 					nxtLetter, nxtTimestamp, _ = nxtLine.split(' ')
 					for bg in self.bigrams:
 						if (crtLetter + nxtLetter == bg):
-							self.results[bg].append(float(nxtTimestamp) - float(crtTimestamp))
+							if (bg in self.results):
+								self.results[bg].append(float(nxtTimestamp) - float(crtTimestamp))
+							else:
+								self.results[bg] = [float(nxtTimestamp) - float(crtTimestamp)]
 
 			print(self.results)
 
@@ -36,6 +38,6 @@ class KeylogsParser:
 
 
 if __name__ == "__main__":
-	keylogsParser = KeylogsParser("keylog.txt")
+	keylogsParser = KeylogsParser(bigrams, "keylog.txt")
 	keylogsParser.read_file()
 	keylogsParser.get_sigma()
