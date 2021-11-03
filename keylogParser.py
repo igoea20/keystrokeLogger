@@ -1,6 +1,7 @@
 import statistics as stat
 
 bigrams = ['th', 'he', 'gh']
+currentUser = 'oskar'
 
 class KeylogsParser:
 	def __init__(self, bigrams, file_name):
@@ -37,6 +38,6 @@ class KeylogsParser:
 
 
 if __name__ == "__main__":
-	keylogsParser = KeylogsParser(bigrams, "keylog.txt")
+	keylogsParser = KeylogsParser(bigrams, f"keylogs/{currentUser}.txt")
 	keylogsParser.read_file()
 	keylogsParser.get_sigma()
