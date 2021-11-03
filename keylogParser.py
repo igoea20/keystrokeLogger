@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
 			'at', 'on', 'es', 'ay', 'or', 'hi']
-currentUser = 'oskar'
+currentUser = 'johan'
 
 class KeylogsParser:
 	def __init__(self, bigrams, file_name):
@@ -67,16 +67,25 @@ class KeylogsParser:
 		y_mean = self.means
 		y_var = self.variances
 
-		#graph for std_Dev
+		#graph showing all stats measures
 		plt.plot(x, y_std_dev, label = "Standard Deviation")
-		#graph for std_Dev
 		plt.plot(x, y_mean, label = "Mean")
-		#graph for std_Dev
 		plt.plot(x, y_var, label = "Variance")
 		plt.xlabel('bigrams')
+		plt.title('Statisics of bigrams')
+		plt.show()
 
-		plt.title('Statistics of bigrams')
-		plt.legend()
+		#individual graphs
+		self.make_graph(x, y_std_dev, 'Standard deviation of bigrams')
+		self.make_graph(x, y_mean, 'Means of bigrams')
+		self.make_graph(x, y_var, 'Variance of bigrams')
+
+
+
+
+	def make_graph(self,x,y,title):
+		plt.plot(x,y)
+		plt.title(title)
 		plt.show()
 
 

