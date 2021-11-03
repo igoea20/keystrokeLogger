@@ -29,8 +29,7 @@ class KeylogsParser:
 
 	def get_sigma(self):
 		for bigram in self.bigrams:
-			result = self.results[bigram]
-			if (len(result) > 1):
+			if (bigram in self.results and len(self.results[bigram]) > 1):
 				print(bigram + ' ' + str(stat.stdev(self.results[bigram])))
 
 
