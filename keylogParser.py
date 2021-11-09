@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
 			'at', 'on', 'es', 'ay', 'or', 'hi']
-currentUser = 'johan'
+currentUser = 'luke'
 
 def filter_pressed(line):
 	letter, timestamp, strokeType = line.split(' ')
