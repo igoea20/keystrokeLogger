@@ -1,9 +1,6 @@
 import statistics as stat
 import matplotlib.pyplot as plt
 
-bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
-			'at', 'on', 'es', 'ay', 'or', 'hi']
-
 def filter_pressed(line):
 	letter, timestamp, strokeType = line.split(' ')
 	if (strokeType.strip() == 'Pressed'):
