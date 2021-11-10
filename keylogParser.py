@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 
 bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
 			'at', 'on', 'es', 'ay', 'or', 'hi']
-currentUser = 'oskar'
 
 def filter_pressed(line):
 	letter, timestamp, strokeType = line.split(' ')
@@ -12,21 +11,16 @@ def filter_pressed(line):
 	else:
 		return False
 
-class KeylogsParser:
-	def __init__(self, bigrams, file_name):
-		self.bigrams = bigrams
-		self.file_name = file_name
-		self.present_bigrams = []
-		self.std_devs = []
-		self.means = []
-		self.variances = []
-		self.results = {}
-
-	## takes a file and returns array seperated by linebreak
-	def read_file(self):
-		with open(self.file_name) as f:
+def read_file(user):
+		with open(f"keylogs/{user}.txt") as f:
 			lines = f.readlines()
 			return lines
+
+class KeylogsParser:
+	def __init__(self, bigrams):
+		self.bigrams = bigrams
+
+	## takes a file and returns array seperated by linebreak
 
 	## generates object with timestamp diffs for given input array
 	def generate_bigram_diffs_array(self, inputs):
@@ -73,8 +67,7 @@ class KeylogsParser:
 			'present_bigrams': present_bigrams
 		}
 
-	def print_graph(self, to_be_named):
-		stats = to_be_named['oskar']
+	def print_graph(self, stats):
 		x = stats['present_bigrams']
 		y_std_dev = stats['std_devs']
 		y_mean = stats['means']
@@ -105,11 +98,3 @@ class KeylogsParser:
 		plt.plot(x,y)
 		plt.title(title)
 		plt.show()
-
-
-if __name__ == "__main__":
-	keylogsParser = KeylogsParser(bigrams, f"keylogs/{currentUser}.txt")
-	keylogsParser.get_pressed_data_diffs()
-	keylogsParser.print_results()
-	keylogsParser.get_stats()
-	keylogsParser.print_graph()
