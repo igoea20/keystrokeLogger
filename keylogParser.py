@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is'
 			'at', 'on', 'es', 'ay', 'or', 'hi']
-currentUser = 'luke'
+currentUser = 'oskar'
 
 def filter_pressed(line):
 	letter, timestamp, strokeType = line.split(' ')
@@ -48,40 +48,37 @@ class KeylogsParser:
 
 
 	## compute timestamp diffs between pressed and set self.results
-	def get_pressed_data_diffs(self):
-		lines = self.read_file()
-		pressed = list(filter(filter_pressed, lines))
-		self.results = self.generate_bigram_diffs_array(pressed)
-
-	def get_stddev(self, bigram):
-		stddev = stat.stdev(self.results[bigram])
-		print('"' + bigram + '" standard deviation: ' + str(stddev))
-		return stddev
-
-	def get_mean(self, bigram):
-		mean = stat.mean(self.results[bigram])
-		print('"' + bigram + '" mean: ' + str(mean))
-		return mean
-
-	def get_variance(self, bigram):
-		var = stat.variance(self.results[bigram])
-		print('"' + bigram + '" variance: ' + str(var))
-		return var
+	def get_pressed_data_diffs(self, vector):
+		pressed = list(filter(filter_pressed, vector))
+		return self.generate_bigram_diffs_array(pressed)
 
 	#calculates the stats and prints them
-	def get_stats(self):
+	def get_stats(self, results):
+		std_devs = []
+		means = []
+		variances = []
+		present_bigrams = []
 		for bigram in self.bigrams:
-			if (bigram in self.results and len(self.results[bigram]) > 1):
-				self.std_devs.append(float(keylogsParser.get_stddev(bigram)))
-				self.means.append(float(keylogsParser.get_mean(bigram)))
-				self.variances.append(float(keylogsParser.get_variance(bigram)))
-				self.present_bigrams.append(bigram)
+			if (bigram in results and len(results[bigram]) > 1):
 
-	def print_graph(self):
-		x = self.present_bigrams
-		y_std_dev = self.std_devs
-		y_mean = self.means
-		y_var = self.variances
+				std_devs.append(float(stat.stdev(results[bigram])))
+				means.append(float(stat.mean(results[bigram])))
+				variances.append(float(stat.variance(results[bigram])))
+				present_bigrams.append(bigram)
+
+		return {
+			'std_devs': std_devs,
+			'means': means,
+			'variances': variances,
+			'present_bigrams': present_bigrams
+		}
+
+	def print_graph(self, to_be_named):
+		stats = to_be_named['oskar']
+		x = stats['present_bigrams']
+		y_std_dev = stats['std_devs']
+		y_mean = stats['means']
+		y_var = stats['variances']
 
 		#graph showing all stats measures
 		plt.plot(x, y_std_dev, label = "Standard Deviation")
