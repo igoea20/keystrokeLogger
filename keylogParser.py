@@ -124,28 +124,3 @@ class KeylogsParser:
 		print(self.std_devs)
 		print(self.means)
 		print(self.variances)
-
-parser = KeylogsParser(bigrams)
-lines_oskar = read_file('oskar')
-lines_johan = read_file('johan')
-lines_aoife = read_file('aoife')
-lines_luke = read_file('luke')
-vector_oskar = parser.get_pressed_data_diffs(lines_oskar)
-vector_johan = parser.get_pressed_data_diffs(lines_johan)
-vector_aoife = parser.get_pressed_data_diffs(lines_aoife)
-vector_luke = parser.get_pressed_data_diffs(lines_luke)
-
-stats = {
-	'oskar': parser.get_stats(vector_oskar),
-	'johan': parser.get_stats(vector_johan),
-	'aoife': parser.get_stats(vector_aoife),
-	'luke': parser.get_stats(vector_luke)
-}
-
-# print(stats)
-# for bigram in vector:
-# 	print(bigram, vector[bigram])
-
-# pressed_data_diffs = parser.get_pressed_data_diffs()
-# print(pressed_data_diffs)
-parser.print_graph(stats)
