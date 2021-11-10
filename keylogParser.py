@@ -16,6 +16,12 @@ def read_file(user):
 			lines = f.readlines()
 			return lines
 
+def is_valid(diff):
+	if (diff > 4):
+		return False
+	else:
+		return True
+
 class KeylogsParser:
 	def __init__(self, bigrams):
 		self.bigrams = bigrams
@@ -33,11 +39,12 @@ class KeylogsParser:
 				crtLetter, crtTimestamp, _ = line.split(' ')
 				nxtLetter, nxtTimestamp, _ = nxtLine.split(' ')
 				for bg in self.bigrams:
-					if (crtLetter + nxtLetter == bg):
+					diff = float(nxtTimestamp) - float(crtTimestamp)
+					if (crtLetter + nxtLetter == bg and is_valid(diff)):
 						if (bg in output):
-							output[bg].append(float(nxtTimestamp) - float(crtTimestamp))
+							output[bg].append(diff)
 						else:
-							output[bg] = [float(nxtTimestamp) - float(crtTimestamp)]
+							output[bg] = [diff]
 		return output
 
 
