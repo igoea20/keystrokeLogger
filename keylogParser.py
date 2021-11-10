@@ -75,23 +75,54 @@ class KeylogsParser:
 		}
 
 	def print_graph(self, stats):
-		x = stats['present_bigrams']
-		y_std_dev = stats['std_devs']
-		y_mean = stats['means']
-		y_var = stats['variances']
+		x = stats['oskar']['present_bigrams']
+		oskar_std_dev = stats['oskar']['std_devs']
+		johan_std_dev = stats['johan']['std_devs']
+		aoife_std_dev = stats['aoife']['std_devs']
+		luke_std_dev = stats['luke']['std_devs']
+
+		oskar_mean = stats['oskar']['means']
+		johan_mean = stats['johan']['means']
+		aoife_mean = stats['aoife']['means']
+		luke_mean = stats['luke']['means']
+
+		oskar_variance = stats['oskar']['variances']
+		johan_variance = stats['johan']['variances']
+		aoife_variance = stats['aoife']['variances']
+		luke_variance = stats['luke']['variances']
 
 		#graph showing all stats measures
-		plt.plot(x, y_std_dev, label = "Standard Deviation")
-		plt.plot(x, y_mean, label = "Mean")
-		plt.plot(x, y_var, label = "Variance")
+		plt.plot(x, oskar_std_dev, label = "Oskar")
+		plt.plot(x, johan_std_dev, label = "Johan")
+		plt.plot(x, aoife_std_dev, label = "Aoife")
+		plt.plot(x, luke_std_dev, label = "Luke")
+
 		plt.xlabel('bigrams')
-		plt.title('Statisics of bigrams')
+		plt.legend()
+		plt.title('Statisics of standard deviations')
 		plt.show()
 
-		#individual graphs
-		self.make_graph(x, y_std_dev, 'Standard deviation of bigrams')
-		self.make_graph(x, y_mean, 'Means of bigrams')
-		self.make_graph(x, y_var, 'Variance of bigrams')
+		plt.plot(x, oskar_mean, label = "Oskar")
+		plt.plot(x, johan_mean, label = "Johan")
+		plt.plot(x, aoife_mean, label = "Aoife")
+		plt.plot(x, luke_mean, label = "Luke")
+
+		plt.xlabel('bigrams')
+		plt.legend()
+		plt.title('Statisics of means')
+		plt.show()
+
+		plt.plot(x, oskar_variance, label = "Oskar")
+		plt.plot(x, johan_variance, label = "Johan")
+		plt.plot(x, aoife_variance, label = "Aoife")
+		plt.plot(x, luke_variance, label = "Luke")
+
+		plt.xlabel('bigrams')
+		plt.legend()
+		plt.title('Statisics of variances')
+		plt.show()
+
+
 
 
 	## Just printing the results
@@ -100,8 +131,3 @@ class KeylogsParser:
 		print(self.std_devs)
 		print(self.means)
 		print(self.variances)
-
-	def make_graph(self,x,y,title):
-		plt.plot(x,y)
-		plt.title(title)
-		plt.show()
