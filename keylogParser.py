@@ -31,7 +31,6 @@ def store_user_results(user, stats):
 	results[user] = parser.get_pressed_data_diffs(lines)
 	stats[user] = parser.get_stats(results[user])
 
-
 	bigram_diff = list(set(stats[user]['present_bigrams']) - set(stats['test']['present_bigrams']))
 	result_copy = results[user]
 	for bg in bigram_diff:
@@ -142,3 +141,24 @@ class KeylogsParser:
 		print(self.std_devs)
 		print(self.means)
 		print(self.variances)
+
+bigrams = ['th', 'he', 'gh', 'nd', 'ne', 'in', 'er', 'an', 'ng', 'me', 'we', 'is', 'at', 'on', 'es', 'ay', 'or', 'hi']
+closest_user = {'std_devs': '', 'means': '', 'variances': ''}
+stats = {}
+MSE = {}
+
+parser = KeylogsParser(bigrams)
+
+
+for user in ['test','luke', 'aoife', 'johan', 'oskar']:
+	stats = store_user_results(user,stats)
+
+for user in ['luke', 'aoife', 'johan', 'oskar']:
+	MSE[user]={}
+	for stat in ['std_devs', 'means', 'variances']:
+		MSE[user][stat] = mse(stats['test']['std_devs'], stats[user][stat])
+
+for stat in ['std_devs', 'means', 'variances']:
+	closest_user[stat] = find_closest_user(MSE, stat)
+	print_graph(stats, stat)
+	print_closest_user_graph(stats, closest_user[stat], stat)
