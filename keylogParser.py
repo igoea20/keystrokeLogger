@@ -1,5 +1,7 @@
-import statistics as stat
 import matplotlib.pyplot as plt
+import statistics as stat
+from collections import Counter
+import numpy as np
 
 def filter_pressed(line):
 	letter, timestamp, strokeType = line.split(' ')
@@ -13,11 +15,72 @@ def read_file(user):
 			lines = f.readlines()
 			return lines
 
+def mse(Y_true, T_pred):
+	return np.square(np.subtract(Y_true, T_pred)).mean()
+
+
 def is_valid(diff):
 	if (diff > 4):
 		return False
 	else:
 		return True
+
+def store_user_results(user, stats):
+	results = {}
+	lines = read_file(user)
+	results[user] = parser.get_pressed_data_diffs(lines)
+	stats[user] = parser.get_stats(results[user])
+
+
+	bigram_diff = list(set(stats[user]['present_bigrams']) - set(stats['test']['present_bigrams']))
+	result_copy = results[user]
+	for bg in bigram_diff:
+		if (bg in result_copy):
+			del result_copy[bg]
+	stats[user] = parser.get_stats(results[user])
+
+	return stats
+
+def find_closest_user(MSE, stat):
+	min_stdev  = min((mse[stat]) for mse in MSE.values())
+	for user in MSE:
+		if(MSE[user][stat]==min_stdev):
+			closest_user = user
+	return closest_user
+
+
+def print_graph(stats, stat):
+	x = stats['oskar']['present_bigrams']
+	test = stats['test'][stat]
+	oskar = stats['oskar'][stat]
+	johan = stats['johan'][stat]
+	aoife = stats['aoife'][stat]
+	luke= stats['luke'][stat]
+
+	#graph showing all stats measures
+	plt.plot(x, test, label = "Test")
+	plt.plot(x, oskar, label = "Oskar")
+	plt.plot(x, johan, label = "Johan")
+	plt.plot(x, aoife, label = "Aoife")
+	plt.plot(x, luke, label = "Luke")
+
+	plt.xlabel('bigrams')
+	plt.legend()
+	plt.title('Statisics of ' + stat)
+	plt.show()
+
+def print_closest_user_graph(stats, user, stat):
+	x = stats['test']['present_bigrams']
+	test_line = stats['test'][stat]
+	user_line = stats[user][stat]
+
+	plt.plot(x, test_line, label = "Test")
+	plt.plot(x, user_line, label = "Closest User")
+
+	plt.xlabel('bigrams')
+	plt.legend()
+	plt.title('Comparison of ' + stat + ' with the closest user: ' + user)
+	plt.show()
 
 class KeylogsParser:
 	def __init__(self, bigrams):
@@ -70,55 +133,6 @@ class KeylogsParser:
 			'variances': variances,
 			'present_bigrams': present_bigrams
 		}
-
-	def print_graph(self, stats):
-		x = stats['oskar']['present_bigrams']
-		oskar_std_dev = stats['oskar']['std_devs']
-		johan_std_dev = stats['johan']['std_devs']
-		aoife_std_dev = stats['aoife']['std_devs']
-		luke_std_dev = stats['luke']['std_devs']
-
-		oskar_mean = stats['oskar']['means']
-		johan_mean = stats['johan']['means']
-		aoife_mean = stats['aoife']['means']
-		luke_mean = stats['luke']['means']
-
-		oskar_variance = stats['oskar']['variances']
-		johan_variance = stats['johan']['variances']
-		aoife_variance = stats['aoife']['variances']
-		luke_variance = stats['luke']['variances']
-
-		#graph showing all stats measures
-		plt.plot(x, oskar_std_dev, label = "Oskar")
-		plt.plot(x, johan_std_dev, label = "Johan")
-		plt.plot(x, aoife_std_dev, label = "Aoife")
-		plt.plot(x, luke_std_dev, label = "Luke")
-
-		plt.xlabel('bigrams')
-		plt.legend()
-		plt.title('Statisics of standard deviations')
-		plt.show()
-
-		plt.plot(x, oskar_mean, label = "Oskar")
-		plt.plot(x, johan_mean, label = "Johan")
-		plt.plot(x, aoife_mean, label = "Aoife")
-		plt.plot(x, luke_mean, label = "Luke")
-
-		plt.xlabel('bigrams')
-		plt.legend()
-		plt.title('Statisics of means')
-		plt.show()
-
-		plt.plot(x, oskar_variance, label = "Oskar")
-		plt.plot(x, johan_variance, label = "Johan")
-		plt.plot(x, aoife_variance, label = "Aoife")
-		plt.plot(x, luke_variance, label = "Luke")
-
-		plt.xlabel('bigrams')
-		plt.legend()
-		plt.title('Statisics of variances')
-		plt.show()
-
 
 
 
