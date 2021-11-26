@@ -10,12 +10,17 @@ def print_graph(stats, stat, present_bigrams, users):
 	for user in users:
 		plt.plot(x, stats[user][stat], label = user)
 
+
 	plt.xlabel('bigrams')
 	plt.legend()
 	plt.title('Statisics of ' + stat)
+	if stat == 'variances':
+		plt.ylim([0, 0.05])
+	else:
+		plt.ylim([0, 0.35])
 	plt.show()
 
-def print_closest_user_graph(stats, test_stats, user, stat_key, bigrams):
+def print_closest_user_graph(stats, test_stats, user, stat_key, bigrams, test_user):
 	test_line = test_stats[stat_key]
 	user_line = stats[user][stat_key]
 
@@ -24,7 +29,11 @@ def print_closest_user_graph(stats, test_stats, user, stat_key, bigrams):
 
 	plt.xlabel('bigrams')
 	plt.legend()
-	plt.title('Comparison of ' + stat_key + ' with the closest user: ' + user)
+	plt.title('Comparison of ' + stat_key + ' for test data of ' + test_user + 'with the closest user: ' + user)
+	if stat_key == 'variances':
+		plt.ylim([0, 0.05])
+	else:
+		plt.ylim([0, 0.35])
 	plt.show()
 
 def find_closest_user(MSE, stat_key):

