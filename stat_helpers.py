@@ -1,6 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+def get_common_bigrams(a_bigrams, b_bigrams):
+
+	a_bigrams_as_set = set(a_bigrams)
+	intersection = a_bigrams_as_set.intersection(b_bigrams)
+	common_bigrams = list(intersection)
+
+	return common_bigrams
+
 def mse(Y_true, T_pred):
 	return np.square(np.subtract(Y_true, T_pred)).mean()
 
@@ -29,7 +37,7 @@ def print_closest_user_graph(stats, test_stats, user, stat_key, bigrams, test_us
 
 	plt.xlabel('bigrams')
 	plt.legend()
-	plt.title('Comparison of ' + stat_key + ' for test data of ' + test_user + 'with the closest user: ' + user)
+	plt.title('Comparison of ' + stat_key + ' for test data of ' + test_user + ' with the closest user: ' + user)
 	if stat_key == 'variances':
 		plt.ylim([0, 0.05])
 	else:
