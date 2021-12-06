@@ -45,17 +45,20 @@ def get_pressed_data_diffs(bigrams, vector):
 
 #calculates the stats and prints them
 def get_stats(bigrams, results):
-	std_devs = []
-	means = []
-	variances = []
+	std_devs = {}
+	means = {}
+	variances = {}
 	present_bigrams = []
 	for bigram in bigrams:
 		if (bigram in results and len(results[bigram]) > 1):
-
-			std_devs.append(float(stat.stdev(results[bigram])))
-			means.append(float(stat.mean(results[bigram])))
-			variances.append(float(stat.variance(results[bigram])))
+			std_devs[bigram] = float(stat.stdev(results[bigram]))
+			means[bigram] = float(stat.mean(results[bigram]))
+			variances[bigram] = float(stat.variance(results[bigram]))
 			present_bigrams.append(bigram)
+		else:
+			std_devs[bigram] = None
+			means[bigram] = None
+			variances[bigram] = None
 
 	return {
 		'std_devs': std_devs,
