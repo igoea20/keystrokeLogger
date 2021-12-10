@@ -25,7 +25,7 @@ def print_closest_user_graph(stats, test_stats, user, stat_key, bigrams):
 		user_line.append(stats[user][stat_key][bigram])
 		test_line.append(test_stats[stat_key][bigram])
 
-	plt.plot(bigrams, test_line, label = "Test")
+	plt.plot(bigrams, test_line, label = "Test (Johan)")
 	plt.plot(bigrams, user_line, label = "Closest User")
 
 	plt.xlabel('bigrams')
